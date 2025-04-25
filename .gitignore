@@ -1,0 +1,4 @@
+# Ignore configuration files
+config.json
+eslint.json
+node_modules/
