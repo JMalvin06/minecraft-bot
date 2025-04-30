@@ -15,7 +15,6 @@ module.exports = {
 		}
 		let player = interaction.options.getString('username');
 		let coords = await serverManager.findPlayer(player);
-		console.log(coords)
 		if(coords == `${player} not found in server`){
 			interaction.reply(coords);
 			return;

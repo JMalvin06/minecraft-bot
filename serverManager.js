@@ -1,5 +1,5 @@
-const { spawn } = require("child_process");
-const {serverDirectory} = require('./config.json');
+const { spawn, exec } = require("child_process");
+const {serverDirectory, ip} = require('./config.json');
 
 let serverProcess = null;
 module.exports = {
@@ -76,7 +76,6 @@ module.exports = {
     },
 
     getDimension: (player) => {
-        
         return new Promise((resolve, reject) => { 
             if(!serverProcess) {
                 resolve("Server is currently off");
@@ -96,7 +95,18 @@ module.exports = {
                 reject(`Error: ${data}`)
             });
         });
-    }
+    },
 
+    ping: () => {
+        return new Promise((resolve, reject) => { 
+            exec(`nc -vz ${ip} 25565`, (error, stdout, stderr) => {
+                if (error) 
+                    resolve(false);
+
+                  if(stderr)
+                    resolve(true);
+            });
+        });
+    }
 
 }

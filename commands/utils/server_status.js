@@ -8,7 +8,12 @@ module.exports = {
 		.setDescription('Will show status of the server'),
 	async execute(interaction) {
         if(serverManager.isRunning()){
-            interaction.reply("Server is currently on");
+            let pingRes = await serverManager.ping();
+            if(pingRes){
+                interaction.reply("Server is currently on");
+            } else {
+                interaction.reply(`Server is loading, please wait...`);
+            }
         } else {
             interaction.reply("Server is currently off");
         }
