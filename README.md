@@ -5,7 +5,7 @@ A simple Discord bot for managing a Minecraft server.
 **Currently only works with Unix systems** </br>
 ### Prerequisites
 - [Node.js v22](https://nodejs.org/en/download/)
-- You will need to host this bot on the same machine as the minecraft server
+- You will need to host this bot on the same machine as your Minecraft server
 
 ### Installation
 1. Download the release unzip the file
