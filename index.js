@@ -27,8 +27,6 @@ for (const folder of commandFolders) {
 	}
 }
 
-
-
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
 // It makes some properties non-nullable.

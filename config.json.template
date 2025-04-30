@@ -1,0 +1,8 @@
+{
+    "token" : "BOT_TOKEN",
+    "clientId" : "APP_ID",
+    "guildId" : "SERVER_ID",
+    "serverDirectory" : "SERVER_DIRECTORY",
+    "ip" : "SERVER_IP",
+    "mapPort" : "BLUEMAP_PORT"
+} 

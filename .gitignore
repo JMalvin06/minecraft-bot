@@ -1,4 +1,4 @@
 # Ignore configuration files
 config.json
-eslint.json
+eslint.config.js
 node_modules/
