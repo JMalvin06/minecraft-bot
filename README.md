@@ -1,4 +1,4 @@
-# Discord Minecraft Server Bot
+# Minecraft Server Discord Bot
 A simple Discord bot for managing a Minecraft server.
 
 ## Usage
