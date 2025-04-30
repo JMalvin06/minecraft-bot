@@ -15,10 +15,12 @@ module.exports = {
 		}
 		let player = interaction.options.getString('username');
 		let coords = await serverManager.findPlayer(player);
+		// Check if player exists on server
 		if(coords == `${player} not found in server`){
 			interaction.reply(coords);
 			return;
 		}
+		// Check if valid coords are given
 		if(coords != "Error, please try again"){
 			let dimension = await serverManager.getDimension(player);
 			let output = `${player} is at ${coords} in ${dimension}`;

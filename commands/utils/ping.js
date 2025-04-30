@@ -9,7 +9,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Ping the server'),
 	async execute(interaction) {
-        let res = await serverManager.ping();
+        let res = await serverManager.ping(); // Checks if server is online
         if(res){
             interaction.reply(`Successfully pinged ${ip} at port 25565`)
         } else {

@@ -8,10 +8,9 @@ module.exports = {
 		.setName('start')
 		.setDescription('Will start the minecraft server'),
 	async execute(interaction) {
-        if(serverManager.startServer()){
+        if(serverManager.startServer())
             interaction.reply("Starting server..");
-        } else {
+        else
             interaction.reply("Server already started");
-        }
 	},
 };

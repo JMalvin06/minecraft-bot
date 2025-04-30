@@ -7,6 +7,6 @@ module.exports = {
 		.setName('ip')
 		.setDescription('Display the server ip'),
 	async execute(interaction) {
-        interaction.reply(`The ip of the server is: \`\`\`${ip}\`\`\``);
+        interaction.reply(`The ip of the server is: \`\`\`${ip}\`\`\``); // Sent as copyable text
 	},
 };

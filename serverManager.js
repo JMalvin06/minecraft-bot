@@ -3,10 +3,18 @@ const {serverDirectory, ip} = require('./config.json');
 
 let serverProcess = null;
 module.exports = {
+    /**
+     * Checks if server process is running
+     * @returns true if server process currently alives
+     */
     isRunning: () => {
         return serverProcess != null;
     },
 
+    /**
+     * Spawns the server process and starts the server
+     * @returns false if process already exists
+     */
     startServer: () => {
         if(serverProcess)
             return false;
@@ -19,6 +27,9 @@ module.exports = {
         return true;
     },
 
+    /**
+     * @returns false if server process does not exist
+     */
     stopServer: () => {
         if (!serverProcess){
             return false;
@@ -28,6 +39,10 @@ module.exports = {
         return true;
     },
 
+    /**
+     * Sends a command to list the players in the server
+     * @returns Response from server if server is on
+     */
     listPlayers: () => {
         return new Promise((resolve, reject) => { 
             if(!serverProcess) {
@@ -50,6 +65,11 @@ module.exports = {
         })
     },
 
+    /**
+     * Finds the coordinates of a specific user on the server
+     * @param {string} player Username
+     * @returns coordinates of player as string
+     */
     findPlayer: (player) => {
         return new Promise((resolve, reject) => { 
             if(!serverProcess) {
@@ -75,6 +95,11 @@ module.exports = {
         })
     },
 
+    /**
+     * Finds the current dimension of a specific user on the server
+     * @param {string} player Username
+     * @returns Dimension of player as string
+     */
     getDimension: (player) => {
         return new Promise((resolve, reject) => { 
             if(!serverProcess) {
@@ -97,6 +122,10 @@ module.exports = {
         });
     },
 
+    /**
+     * Pings the server ip at port 25565
+     * @returns true if successful
+     */
     ping: () => {
         return new Promise((resolve, reject) => { 
             exec(`nc -vz ${ip} 25565`, (error, stdout, stderr) => {
