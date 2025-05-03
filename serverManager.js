@@ -1,69 +1,126 @@
 const { spawn, exec } = require("child_process");
 const {serverDirectory, ip} = require('./config.json');
+const { time } = require("console");
 
 let serverProcess = null;
+let timeEmpty = -1;
+let stopTime = 900000;
+
+
+function isRunning(){
+    return serverProcess != null;
+}
+
+function ping(){
+    return new Promise((resolve, reject) => { 
+        exec(`nc -vz ${ip} 25565`, (error, stdout, stderr) => {
+            if (error) 
+                resolve(false);
+
+              if(stderr)
+                resolve(true);
+        });
+    });
+}
+
+async function isEmpty () {
+    let players = await listPlayers();
+    index = players.indexOf("There are");
+    if (index != -1){
+        if(players.indexOf(" 0 ") != -1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+function listPlayers() {
+    return new Promise((resolve, reject) => { 
+        if(!serverProcess) {
+            resolve("Server is currently off");
+        }
+        serverProcess.stdin.write("list\n");
+        serverProcess.stdout.on('data', (data) => {
+            index = data.toString().indexOf("There are");
+            if(index == -1) {
+                resolve("Error, please try again");
+            } else{
+                let output = data.toString().substring(index);
+                resolve(output);
+            }
+        });
+
+        serverProcess.stderr.on('data', (data) => {
+            reject(`Error: ${data}`)
+        });
+    })
+}
+
+function stopServer() {
+    if (!serverProcess){
+        return false;
+    }
+
+    serverProcess.stdin.write("stop\n");
+    return true;
+}
+
+function startServer() {
+    if(serverProcess)
+        return false;
+    
+    serverProcess = spawn('bash', ['-c', `cd ${serverDirectory} && ./run.sh`]);
+    serverProcess.on('close', (code) => {
+        console.log(`Minecraft server exited with code: ${code}`);
+        serverProcess = null;
+    });
+    return true;
+}
+
+async function autoStop(interval){
+    let isOnline = await ping();
+    // If server is on
+    if(serverProcess && isOnline){
+        let empty = await isEmpty();
+        if(empty){
+            timeEmpty += interval;
+            if(timeEmpty >= stopTime){
+                stopServer();
+            }
+        } else {
+            timeEmpty = 0;
+        }
+    }
+    else
+        timeEmpty = 0;
+}
+
+
 module.exports = {
     /**
      * Checks if server process is running
      * @returns true if server process currently alives
      */
-    isRunning: () => {
-        return serverProcess != null;
-    },
+    isRunning,
 
     /**
      * Spawns the server process and starts the server
      * @returns false if process already exists
      */
-    startServer: () => {
-        if(serverProcess)
-            return false;
-        
-        serverProcess = spawn('bash', ['-c', `cd ${serverDirectory} && ./run.sh`]);
-        serverProcess.on('close', (code) => {
-            console.log(`Minecraft server exited with code: ${code}`);
-            serverProcess = null;
-        });
-        return true;
-    },
+    startServer,
 
     /**
      * @returns false if server process does not exist
      */
-    stopServer: () => {
-        if (!serverProcess){
-            return false;
-        }
-
-        serverProcess.stdin.write("stop\n");
-        return true;
-    },
+    stopServer,
 
     /**
      * Sends a command to list the players in the server
      * @returns Response from server if server is on
      */
-    listPlayers: () => {
-        return new Promise((resolve, reject) => { 
-            if(!serverProcess) {
-                resolve("Server is currently off");
-            }
-            serverProcess.stdin.write("list\n");
-            serverProcess.stdout.on('data', (data) => {
-                index = data.toString().indexOf("There are");
-                if(index == -1) {
-                    resolve("Error, please try again");
-                } else{
-                    let output = data.toString().substring(index);
-                    resolve(output);
-                }
-            });
-    
-            serverProcess.stderr.on('data', (data) => {
-                reject(`Error: ${data}`)
-            });
-        })
-    },
+    listPlayers,
 
     /**
      * Finds the coordinates of a specific user on the server
@@ -126,16 +183,10 @@ module.exports = {
      * Pings the server ip at port 25565
      * @returns true if successful
      */
-    ping: () => {
-        return new Promise((resolve, reject) => { 
-            exec(`nc -vz ${ip} 25565`, (error, stdout, stderr) => {
-                if (error) 
-                    resolve(false);
+    ping,
 
-                  if(stderr)
-                    resolve(true);
-            });
-        });
-    }
-
+    /** 
+     * Automatically shuts down the server after a certain amount of time
+     */
+    autoStop
 }
