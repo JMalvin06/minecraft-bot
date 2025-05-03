@@ -64,6 +64,7 @@ function stopServer() {
     }
 
     serverProcess.stdin.write("stop\n");
+    serverProcess = null;
     return true;
 }
 
