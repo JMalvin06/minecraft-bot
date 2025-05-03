@@ -7,6 +7,6 @@ module.exports = {
 		.setName('map')
 		.setDescription('Links the server map'),
 	async execute(interaction) {
-        interaction.reply(`[Map Link](https://${ip}:${mapPort})`); // Sent as hyperlink
+        interaction.reply(`[Map Link](http://${ip}:${mapPort}/#world:-48:0:-32:1500:0:0:0:0:perspective)`); // Sent as hyperlink
 	},
 };
