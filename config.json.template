@@ -1,8 +1,8 @@
 {
     "token" : "BOT_TOKEN",
     "clientId" : "APP_ID",
-    "guildId" : "SERVER_ID", // Discord server ID
-    "serverDirectory" : "SERVER_DIRECTORY", // Example: Documents/MCServerFolder
+    "guildId" : "DISCORD_SERVER_ID",
+    "serverDirectory" : "Documents/MCServerFolder",
     "ip" : "SERVER_IP",
-    "mapPort" : "BLUEMAP_PORT" // Only required if server is using BlueMap
+    "mapPort" : "MAP_PORT"
 } 
