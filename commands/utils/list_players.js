@@ -7,6 +7,8 @@ module.exports = {
 		.setName('list')
 		.setDescription('Will list the players on the server'),
 	async execute(interaction) {
-        interaction.reply(await serverManager.listPlayers());
+		let timeout = new Promise((resolve) => setTimeout(() => resolve("Error, response timed out - Server is likely loading)"), 2000));
+		let res = await Promise.race([timeout, serverManager.listPlayers()]);
+        interaction.reply(res);
 	},
 };

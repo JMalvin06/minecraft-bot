@@ -5,6 +5,7 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const serverManager = require('./serverManager');
 
+const CHECK_INTERVAL = 20000;
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -34,13 +35,12 @@ for (const folder of commandFolders) {
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 	setInterval(() => {
-		serverManager.autoStop(20000);
-	}, 1000);
+		serverManager.autoStop(CHECK_INTERVAL);
+	}, CHECK_INTERVAL);
 });
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
-
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {

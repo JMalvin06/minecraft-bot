@@ -1,6 +1,8 @@
 const { spawn, exec } = require("child_process");
 const {serverDirectory, ip} = require('./config.json');
 const { time } = require("console");
+const path = require('path');
+const os = require('os');
 
 let serverProcess = null;
 let timeEmpty = -1;
@@ -37,15 +39,21 @@ async function isEmpty () {
 }
 
 function listPlayers() {
-    return new Promise((resolve, reject) => { 
-        if(!serverProcess) {
+    return new Promise(async (resolve, reject) => { 
+        if(!serverProcess){
             resolve("Server is currently off");
+            return;
         }
+        else if (!(await ping())){
+            resolve("Server is currently loading, please wait..");
+            return;
+        }
+
         serverProcess.stdin.write("list\n");
         serverProcess.stdout.on('data', (data) => {
             index = data.toString().indexOf("There are");
             if(index == -1) {
-                resolve("Error, please try again");
+                resolve("Unable to list players, please try again");
             } else{
                 let output = data.toString().substring(index);
                 resolve(output);
@@ -71,8 +79,10 @@ function stopServer() {
 function startServer() {
     if(serverProcess)
         return false;
+
+    const serverPath = path.resolve(os.homedir(), serverDirectory);
+    serverProcess = spawn('./run.sh', {cwd: serverPath});
     
-    serverProcess = spawn('bash', ['-c', `cd ${serverDirectory} && ./run.sh`]);
     serverProcess.on('close', (code) => {
         console.log(`Minecraft server exited with code: ${code}`);
         serverProcess = null;
