@@ -12,14 +12,15 @@ A simple Discord bot for managing a Minecraft server.
 1. Download the release unzip the file
 2. run ```npm install discord.js``` to download the required dependencies
 3. Create a config.json file in the minecraft_bot directory with the following parameters:
+</br>*Note that mapPort is only required if using a plugin such as dynmap or BlueMap*
 ```json
-// Contents of config.json.template
+"_comment": "Contents of config.json.template"
 "token" : "BOT_TOKEN",
 "clientId" : "APP_ID",
-"guildId" : "SERVER_ID", // Discord server ID
-"serverDirectory" : "SERVER_DIRECTORY", // Example: Documents/MCServerFolder
+"guildId" : "DISCORD_SERVER_ID",
+"serverDirectory" : "Documents/MCServerFolder",
 "ip" : "SERVER_IP",
-"mapPort" : "BLUEMAP_PORT" // Only required if server is using BlueMap
+"mapPort" : "MAP_PORT"
 ```
 4. Add the bot to your server (register through [Discord Developer Portal](https://discord.com/developers/applications))
 5. Run ```node deploy-commands```
